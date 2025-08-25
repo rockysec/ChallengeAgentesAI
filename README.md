@@ -48,12 +48,12 @@ Usuario → SistemaAgentes → AgenteCoordinador → [Decisión]
 
 ## 🛠️ **Herramientas Disponibles**
 
-### **Herramientas Base (Obligatorias)**
+### **Herramientas LDAP Base**
 - `get_current_user_info` - Información del usuario actual
 - `get_user_groups` - Grupos del usuario
 - `reset_system` - Reseteo del sistema
 
-### **Herramientas Adicionales**
+### **Herramientas LDAP Adicionales**
 - `list_all_users` - Lista todos los usuarios del LDAP
 - `search_users_by_department` - Búsqueda de usuarios por departamento
 - `analyze_ldap_structure` - Análisis de la estructura LDAP
@@ -282,7 +282,7 @@ poetry run python -m agentesai.cli "¿cuál es el departamento con más usuarios
 poetry run python -m agentesai.cli "mostrar usuarios ordenados alfabeticamente"
 
 ### **🔴 Herramientas Ofensivas (Análisis de Seguridad):**
-
+```
 ```bash
 # Análisis RootDSE del servidor LDAP
 poetry run python -m agentesai.cli "rootdse info"
@@ -320,7 +320,7 @@ poetry run python -m agentesai.cli "escalacion privilegios"
 poetry run python -m agentesai.cli "low priv"
 
 ### **Fingerprint NSE con Target Específico:**
-```bash
+
 # Con IP específica
 poetry run python -m agentesai.cli "nmap nse 192.168.1.100"
 poetry run python -m agentesai.cli "fingerprint nmap 10.0.0.50"

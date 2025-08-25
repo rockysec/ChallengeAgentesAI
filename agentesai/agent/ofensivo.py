@@ -39,12 +39,14 @@ class AgenteOfensivo:
         from ..tools_offensive import (
             tool_rootdse_info,
             tool_anonymous_enum,
+            tool_starttls_test,
             # Futuras herramientas ofensivas se agregarán aquí
         )
         
         self.herramientas_ofensivas = {
             "tool_rootdse_info": tool_rootdse_info,
             "tool_anonymous_enum": tool_anonymous_enum,
+            "tool_starttls_test": tool_starttls_test,
         }
         
         console.print(Panel(f"🔴 {len(self.herramientas_ofensivas)} herramientas ofensivas inicializadas", style="red"))

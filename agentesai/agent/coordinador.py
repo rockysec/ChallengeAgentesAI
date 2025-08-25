@@ -123,7 +123,12 @@ class AgenteCoordinador:
             "enumeración anónima", "enumeracion anonima", "anonymous enum",  # tool_anonymous_enum
             "bind anónimo", "bind anonimo", "anonymous bind",  # tool_anonymous_enum
             "usuarios anónimos", "usuarios anonimos", "anonymous users",  # tool_anonymous_enum
-            "enumerar usuarios", "enumerar grupos", "list users groups"  # tool_anonymous_enum
+            "enumerar usuarios", "enumerar grupos", "list users groups",  # tool_anonymous_enum
+            
+            # Test STARTTLS
+            "starttls", "start tls", "tls test", "test tls",  # tool_starttls_test
+            "test seguridad", "seguridad tls", "tls security",  # tool_starttls_test
+            "downgrade tls", "tls downgrade", "handshake tls"  # tool_starttls_test
         ]
         
         # Verifica si alguno de los patrones está presente en la consulta
@@ -165,6 +170,8 @@ class AgenteCoordinador:
             return "tool_rootdse_info"
         elif any(palabra in consulta_lower for palabra in ["enumeración anónima", "enumeracion anonima", "anonymous enum", "bind anónimo", "bind anonimo", "anonymous bind", "usuarios anónimos", "usuarios anonimos", "anonymous users", "enumerar usuarios", "enumerar grupos", "list users groups"]):
             return "tool_anonymous_enum"
+        elif any(palabra in consulta_lower for palabra in ["starttls", "start tls", "tls test", "test tls", "test seguridad", "seguridad tls", "tls security", "downgrade tls", "tls downgrade", "handshake tls"]):
+            return "tool_starttls_test"
         
         return None
     

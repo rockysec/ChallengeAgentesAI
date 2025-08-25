@@ -61,6 +61,7 @@ Usuario → SistemaAgentes → AgenteCoordinador → [Decisión]
 ### **🔴 Herramientas Ofensivas (Análisis de Seguridad)**
 - `tool_rootdse_info` - Análisis RootDSE para namingContexts, extensiones y controles soportados
 - `tool_anonymous_enum` - Enumeración anónima para usuarios, grupos y atributos sensibles
+- `tool_starttls_test` - Test de seguridad STARTTLS, detecta fallos en handshake y downgrades TLS
 
 ## 🚀 **Instalación y Configuración Paso a Paso**
 
@@ -302,6 +303,14 @@ poetry run python -c "
 from agentesai.agent.sistema import SistemaAgentes
 sistema = SistemaAgentes()
 resultado = sistema.ejecutar_herramienta_ofensiva('tool_anonymous_enum')
+print(resultado)
+"
+
+# Test STARTTLS
+poetry run python -c "
+from agentesai.agent.sistema import SistemaAgentes
+sistema = SistemaAgentes()
+resultado = sistema.ejecutar_herramienta_ofensiva('tool_starttls_test')
 print(resultado)
 "
 ```

@@ -88,6 +88,8 @@ class SistemaAgentes:
                     resultado = self.ejecutar_herramienta_ofensiva("tool_rootdse_info")
                 elif decision["herramienta"] == "tool_anonymous_enum":
                     resultado = self.ejecutar_herramienta_ofensiva("tool_anonymous_enum")
+                elif decision["herramienta"] == "tool_starttls_test":
+                    resultado = self.ejecutar_herramienta_ofensiva("tool_starttls_test")
                 else:
                     # La consulta puede ser respondida con herramientas existentes
                     resultado = self._ejecutar_herramienta_existente(decision)
@@ -277,6 +279,26 @@ class SistemaAgentes:
             console.print(Panel(f"🔴 Ejecutando herramienta ofensiva: {nombre}", style="red"))
             
             resultado = self.ofensivo.ejecutar_herramienta_ofensiva(nombre, **kwargs)
+            
+            # Mostrar resultado formateado para herramientas específicas
+            if nombre == "tool_starttls_test" and not resultado.get("error"):
+                try:
+                    from .tools_offensive.starttls_test import mostrar_resultado_starttls
+                    mostrar_resultado_starttls(resultado)
+                except ImportError:
+                    console.print("⚠️ No se pudo importar la función de visualización")
+            elif nombre == "tool_rootdse_info" and not resultado.get("error"):
+                try:
+                    from .tools_offensive.rootdse_info import mostrar_resultado_rootdse
+                    mostrar_resultado_rootdse(resultado)
+                except ImportError:
+                    console.print("⚠️ No se pudo importar la función de visualización")
+            elif nombre == "tool_anonymous_enum" and not resultado.get("error"):
+                try:
+                    from .tools_offensive.anonymous_enum import mostrar_resultado_enum
+                    mostrar_resultado_enum(resultado)
+                except ImportError:
+                    console.print("⚠️ No se pudo importar la función de visualización")
             
             # Registrar la operación ofensiva
             self.coordinador.registrar_consulta(f"herramienta_ofensiva:{nombre}", str(resultado))

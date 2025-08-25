@@ -143,6 +143,11 @@ def main(query, reset):
                         console.print(Panel(f"📊 Resultado: {resultado_final}", style="bold blue"))
                 else:
                     console.print(Panel(f"📊 Resultado: {ejecucion}", style="bold blue"))
+            
+            elif tipo == "herramienta_ofensiva":
+                # Resultado de herramienta ofensiva - ya se mostró formateado en el sistema
+                console.print(Panel("✅ Herramienta ofensiva ejecutada exitosamente", style="bold green"))
+                console.print("📊 El resultado formateado ya se mostró arriba")
                     
             else:
                 # Resultado genérico

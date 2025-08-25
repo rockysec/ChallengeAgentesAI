@@ -164,9 +164,6 @@ poetry install
 ```bash
 # Instalar dependencias principales
 pip install -r requirements.txt
-
-# O instalar todas las dependencias (incluyendo desarrollo)
-pip install -r requirements-dev.txt
 ```
 
 ### 🚀 **Paso 5: Verificar la Instalación**
@@ -179,21 +176,7 @@ poetry run python -c "from agentesai.agent.sistema import SistemaAgentes; print(
 poetry run pytest tests/ -v
 ```
 
-### 🎯 **Paso 6: Ejecutar la Aplicación**
-
-#### **Comandos Directos:**
-```bash
-# Consulta básica
-poetry run python -m agentesai.cli "¿quién soy?"
-
-# Listar usuarios del LDAP
-poetry run python -m agentesai.cli "listar usuarios"
-
-# Buscar por departamento
-poetry run python -m agentesai.cli "usuarios del departamento Development"
-```
-
-### 🛠️ **Paso 7: Solución de Problemas Comunes**
+### 🛠️ **Solución de Problemas Comunes**
 
 #### **Error: "poetry: command not found"**
 ```bash
@@ -227,24 +210,6 @@ export GEMINI_API_KEY="tu_api_key_aqui"
 # Verificar que el servidor LDAP esté corriendo
 # O comentar la configuración LDAP en .env si no lo necesitas
 ```
-
-### 📚 **Paso 8: Primeros Pasos con la Aplicación**
-
-1. **Ejecuta una consulta simple:**
-   ```bash
-   poetry run python -m agentesai.cli "¿quién soy?"
-   ```
-
-2. **Explora las herramientas base:**
-   ```bash
-   poetry run python -m agentesai.cli "listar usuarios"
-   poetry run python -m agentesai.cli "mostrar estructura LDAP"
-   ```
-
-3. **Prueba la auto-expansión:**
-   ```bash
-   poetry run python -m agentesai.cli "¿cuántos grupos hay en total?"
-   ```
 
 ### 🎉 **¡Listo! Tu aplicación está funcionando**
 
@@ -434,18 +399,52 @@ print(stats)
 ### **Ejecutar Tests:**
 
 ```bash
-# Con Poetry
-poetry run pytest tests/ -v
+# Ejecutar todas las pruebas
+poetry run pytest
 
-# Con pip
-python -m pytest tests/ -v
-
-# Tests específicos
+# Ejecutar pruebas específicas
+poetry run pytest tests/unit/test_sistema_agentes.py -v
 poetry run pytest tests/unit/test_coordinador.py -v
 poetry run pytest tests/unit/test_ejecutor.py -v
 poetry run pytest tests/unit/test_generador.py -v
-poetry run pytest tests/unit/test_sistema_agentes.py -v
+poetry run pytest tests/unit/test_ldap_connector.py -v
+poetry run pytest tests/unit/test_tools_base.py -v
+
+# 🔴 Tests del Agente Ofensivo
+poetry run pytest tests/unit/test_agente_ofensivo.py -v
+poetry run pytest tests/unit/test_visualizacion_ofensiva.py -v
+poetry run pytest tests/unit/test_funciones_auxiliares_ofensivas.py -v
+
+# 🚀 Script de ejecución de pruebas ofensivas
+python run_tests_offensive.py all
+python run_tests_offensive.py agente
+python run_tests_offensive.py visualizacion
+python run_tests_offensive.py auxiliares
 ```
+
+### **🔴 Pruebas del Agente Ofensivo:**
+
+```bash
+# Ejecutar todas las pruebas ofensivas
+python run_tests_offensive.py all
+
+# Ejecutar pruebas específicas
+python run_tests_offensive.py agente          # Pruebas del agente ofensivo
+python run_tests_offensive.py visualizacion   # Pruebas de visualización
+python run_tests_offensive.py auxiliares      # Pruebas de funciones auxiliares
+
+# Con pytest directamente
+poetry run pytest tests/unit/test_agente_ofensivo.py -v
+poetry run pytest tests/unit/test_visualizacion_ofensiva.py -v
+poetry run pytest tests/unit/test_funciones_auxiliares_ofensivas.py -v
+```
+
+**Cobertura de Pruebas:**
+- ✅ **Agente Ofensivo**: Inicialización, ejecución, estadísticas
+- ✅ **Herramientas Ofensivas**: RootDSE, enumeración anónima, STARTTLS, Simple vs SASL, ACL Diff, Self Password Change, LDAP Nmap NSE
+- ✅ **Funciones de Visualización**: Todas las funciones de presentación de resultados
+- ✅ **Funciones Auxiliares**: Análisis de seguridad, detección de vulnerabilidades, extracción de parámetros
+- ✅ **Integración**: Flujo completo desde consulta CLI hasta resultado formateado
 
 ### **Verificar Funcionalidad:**
 

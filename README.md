@@ -72,7 +72,7 @@ Antes de comenzar, asegúrate de tener instalado:
 
 ```bash
 # Clonar el repositorio
-git clone https://github.com/tu-usuario/offsec_challenge.git
+git clone https://github.com/rockysec/ChallengeAgentesAI.git
 
 # Entrar al directorio del proyecto
 cd offsec_challenge/AgentesAI

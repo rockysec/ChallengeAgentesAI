@@ -52,7 +52,7 @@ Usuario → SistemaAgentes → AgenteCoordinador → [Decisión]
 - `get_user_groups` - Grupos del usuario
 - `reset_system` - Reseteo del sistema
 
-### **Herramientas Adicionales (Seguridad Ofensiva)**
+### **Herramientas Adicionales**
 - `list_all_users` - Lista todos los usuarios del LDAP
 - `search_users_by_department` - Búsqueda de usuarios por departamento
 - `analyze_ldap_structure` - Análisis de la estructura LDAP

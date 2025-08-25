@@ -90,6 +90,16 @@ class SistemaAgentes:
                     resultado = self.ejecutar_herramienta_ofensiva("tool_anonymous_enum")
                 elif decision["herramienta"] == "tool_starttls_test":
                     resultado = self.ejecutar_herramienta_ofensiva("tool_starttls_test")
+                elif decision["herramienta"] == "tool_simple_vs_sasl_bind":
+                    resultado = self.ejecutar_herramienta_ofensiva("tool_simple_vs_sasl_bind")
+                elif decision["herramienta"] == "tool_acl_diff":
+                    resultado = self.ejecutar_herramienta_ofensiva("tool_acl_diff")
+                elif decision["herramienta"] == "tool_self_password_change":
+                    resultado = self.ejecutar_herramienta_ofensiva("tool_self_password_change")
+                elif decision["herramienta"] == "tool_ldap_nmap_nse":
+                    # Extraer parámetros adicionales de la consulta CLI
+                    parametros = self._extraer_parametros_nmap_nse(consulta)
+                    resultado = self.ejecutar_herramienta_ofensiva("tool_ldap_nmap_nse", **parametros)
                 else:
                     # La consulta puede ser respondida con herramientas existentes
                     resultado = self._ejecutar_herramienta_existente(decision)
@@ -299,6 +309,30 @@ class SistemaAgentes:
                     mostrar_resultado_enum(resultado)
                 except ImportError:
                     console.print("⚠️ No se pudo importar la función de visualización")
+            elif nombre == "tool_simple_vs_sasl_bind" and not resultado.get("error"):
+                try:
+                    from .tools_offensive.simple_vs_sasl_bind import mostrar_resultado_simple_vs_sasl
+                    mostrar_resultado_simple_vs_sasl(resultado)
+                except ImportError:
+                    console.print("⚠️ No se pudo importar la función de visualización")
+            elif nombre == "tool_acl_diff" and not resultado.get("error"):
+                try:
+                    from .tools_offensive.acl_diff import mostrar_resultado_acl_diff
+                    mostrar_resultado_acl_diff(resultado)
+                except ImportError:
+                    console.print("⚠️ No se pudo importar la función de visualización")
+            elif nombre == "tool_self_password_change" and not resultado.get("error"):
+                try:
+                    from .tools_offensive.self_password_change import mostrar_resultado_self_password_change
+                    mostrar_resultado_self_password_change(resultado)
+                except ImportError:
+                    console.print("⚠️ No se pudo importar la función de visualización")
+            elif nombre == "tool_ldap_nmap_nse" and not resultado.get("error"):
+                try:
+                    from .tools_offensive.ldap_nmap_nse import mostrar_resultado_ldap_nmap_nse
+                    mostrar_resultado_ldap_nmap_nse(resultado)
+                except ImportError:
+                    console.print("⚠️ No se pudo importar la función de visualización")
             
             # Registrar la operación ofensiva
             self.coordinador.registrar_consulta(f"herramienta_ofensiva:{nombre}", str(resultado))
@@ -312,6 +346,86 @@ class SistemaAgentes:
                 "mensaje": f"Error ejecutando herramienta ofensiva {nombre}: {str(e)}",
                 "herramienta": nombre
             }
+    
+    def _extraer_parametros_nmap_nse(self, consulta: str) -> Dict[str, Any]:
+        """
+        Extrae parámetros para tool_ldap_nmap_nse desde la consulta CLI.
+        
+        Args:
+            consulta (str): Consulta del usuario
+            
+        Returns:
+            Dict[str, Any]: Parámetros extraídos
+        """
+        parametros = {}
+        
+        try:
+            # Buscar IP o hostname en la consulta
+            import re
+            
+            # Patrones para detectar IPs
+            ip_patterns = [
+                r'\b(?:\d{1,3}\.){3}\d{1,3}\b',  # IPv4
+                r'\b(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}\b',  # IPv6
+            ]
+            
+            # Patrones para detectar hostnames
+            hostname_patterns = [
+                r'\b(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}\b',  # Dominio
+                r'\b[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\b',  # Hostname simple
+            ]
+            
+            # Buscar IPs primero
+            for pattern in ip_patterns:
+                matches = re.findall(pattern, consulta)
+                if matches:
+                    parametros["target"] = matches[0]
+                    break
+            
+            # Si no se encontró IP, buscar hostname
+            if "target" not in parametros:
+                for pattern in hostname_patterns:
+                    matches = re.findall(pattern, consulta)
+                    if matches:
+                        # Filtrar palabras comunes que no son hostnames
+                        palabras_comunes = ["nmap", "nse", "ldap", "fingerprint", "scripts", "reconocimiento", "externo"]
+                        for match in matches:
+                            if match.lower() not in palabras_comunes and len(match) > 2:
+                                parametros["target"] = match
+                                break
+                        if "target" in parametros:
+                            break
+            
+            # Buscar puerto específico
+            puerto_match = re.search(r'\b(\d{3,5})\b', consulta)
+            if puerto_match:
+                puerto = int(puerto_match.group(1))
+                if puerto != 389:  # Solo cambiar si no es el puerto por defecto
+                    parametros["port"] = puerto
+            
+            # Buscar scripts específicos
+            if "ldap-rootdse" in consulta or "rootdse" in consulta:
+                parametros["scripts"] = "ldap-rootdse"
+            elif "ldap-search" in consulta or "search" in consulta:
+                parametros["scripts"] = "ldap-search"
+            elif "ldap-brute" in consulta or "brute" in consulta:
+                parametros["scripts"] = "ldap-brute"
+            
+            # Buscar modo verbose
+            if "verbose" in consulta.lower() or "detallado" in consulta.lower():
+                parametros["verbose"] = True
+            
+            # Buscar timeout personalizado
+            timeout_match = re.search(r'timeout\s*(\d+)', consulta.lower())
+            if timeout_match:
+                parametros["timeout"] = int(timeout_match.group(1))
+            
+            console.print(f"   🔍 Parámetros extraídos: {parametros}")
+            
+        except Exception as e:
+            console.print(f"   ⚠️ Error extrayendo parámetros: {e}")
+        
+        return parametros
     
     def modo_interactivo(self):
         """

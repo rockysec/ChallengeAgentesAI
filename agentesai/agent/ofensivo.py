@@ -40,6 +40,10 @@ class AgenteOfensivo:
             tool_rootdse_info,
             tool_anonymous_enum,
             tool_starttls_test,
+            tool_simple_vs_sasl_bind,
+            tool_acl_diff,
+            tool_self_password_change,
+            tool_ldap_nmap_nse,
             # Futuras herramientas ofensivas se agregarán aquí
         )
         
@@ -47,6 +51,10 @@ class AgenteOfensivo:
             "tool_rootdse_info": tool_rootdse_info,
             "tool_anonymous_enum": tool_anonymous_enum,
             "tool_starttls_test": tool_starttls_test,
+            "tool_simple_vs_sasl_bind": tool_simple_vs_sasl_bind,
+            "tool_acl_diff": tool_acl_diff,
+            "tool_self_password_change": tool_self_password_change,
+            "tool_ldap_nmap_nse": tool_ldap_nmap_nse,
         }
         
         console.print(Panel(f"🔴 {len(self.herramientas_ofensivas)} herramientas ofensivas inicializadas", style="red"))

@@ -128,7 +128,27 @@ class AgenteCoordinador:
             # Test STARTTLS
             "starttls", "start tls", "tls test", "test tls",  # tool_starttls_test
             "test seguridad", "seguridad tls", "tls security",  # tool_starttls_test
-            "downgrade tls", "tls downgrade", "handshake tls"  # tool_starttls_test
+            "downgrade tls", "tls downgrade", "handshake tls",  # tool_starttls_test
+            
+            # Comparación Simple vs SASL
+            "simple vs sasl", "simple vs sasl bind", "simple sasl",  # tool_simple_vs_sasl_bind
+            "ldapwhoami", "whoami ldap", "bind simple", "bind sasl",  # tool_simple_vs_sasl_bind
+            "comparar bind", "comparar autenticacion", "fallback bind",  # tool_simple_vs_sasl_bind
+            
+            # Comparación ACLs
+            "acl diff", "acls", "comparar acls", "comparar permisos",  # tool_acl_diff
+            "anonimo vs admin", "anonimo admin", "permisos anonimo",  # tool_acl_diff
+            "diferencia permisos", "control acceso", "escalacion privilegios",  # tool_acl_diff
+            
+            # Test de Cambio de Contraseña
+            "self password change", "cambiar contraseña", "password change",  # tool_self_password_change
+            "by self write", "self write", "cambio contraseña",  # tool_self_password_change
+            "escalacion privilegios", "privilege escalation", "low priv",  # tool_self_password_change
+            
+            # Fingerprint NSE
+            "ldap nmap nse", "nmap nse", "fingerprint nmap",  # tool_ldap_nmap_nse
+            "nse scripts", "ldap-rootdse", "ldap-search",  # tool_ldap_nmap_nse
+            "reconocimiento externo", "fingerprint externo"  # tool_ldap_nmap_nse
         ]
         
         # Verifica si alguno de los patrones está presente en la consulta
@@ -172,6 +192,14 @@ class AgenteCoordinador:
             return "tool_anonymous_enum"
         elif any(palabra in consulta_lower for palabra in ["starttls", "start tls", "tls test", "test tls", "test seguridad", "seguridad tls", "tls security", "downgrade tls", "tls downgrade", "handshake tls"]):
             return "tool_starttls_test"
+        elif any(palabra in consulta_lower for palabra in ["simple vs sasl", "simple vs sasl bind", "simple sasl", "ldapwhoami", "whoami ldap", "bind simple", "bind sasl", "comparar bind", "comparar autenticacion", "fallback bind"]):
+            return "tool_simple_vs_sasl_bind"
+        elif any(palabra in consulta_lower for palabra in ["acl diff", "acls", "comparar acls", "comparar permisos", "anonimo vs admin", "anonimo admin", "permisos anonimo", "diferencia permisos", "control acceso", "escalacion privilegios"]):
+            return "tool_acl_diff"
+        elif any(palabra in consulta_lower for palabra in ["self password change", "cambiar contraseña", "password change", "by self write", "self write", "cambio contraseña", "escalacion privilegios", "privilege escalation", "low priv"]):
+            return "tool_self_password_change"
+        elif any(palabra in consulta_lower for palabra in ["ldap nmap nse", "nmap nse", "fingerprint nmap", "nse scripts", "ldap-rootdse", "ldap-search", "reconocimiento externo", "fingerprint externo"]):
+            return "tool_ldap_nmap_nse"
         
         return None
     

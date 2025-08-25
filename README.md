@@ -62,6 +62,10 @@ Usuario → SistemaAgentes → AgenteCoordinador → [Decisión]
 - `tool_rootdse_info` - Análisis RootDSE para namingContexts, extensiones y controles soportados
 - `tool_anonymous_enum` - Enumeración anónima para usuarios, grupos y atributos sensibles
 - `tool_starttls_test` - Test de seguridad STARTTLS, detecta fallos en handshake y downgrades TLS
+- `tool_simple_vs_sasl_bind` - Compara resultados de ldapwhoami con y sin -x para detectar fallbacks inseguros
+- `tool_acl_diff` - Compara lo que ve un bind anónimo vs un bind autenticado admin para detectar diferencias en ACLs
+- `tool_self_password_change` - Intenta cambiar userPassword con un usuario low-priv para validar regla "by self write"
+- `tool_ldap_nmap_nse` - Ejecuta nmap -p389 --script ldap-rootdse,ldap-search para fingerprint adicional (acepta target desde CLI)
 
 ## 🚀 **Instalación y Configuración Paso a Paso**
 
@@ -290,30 +294,59 @@ poetry run python -m agentesai.cli "enumeración anónima"
 poetry run python -m agentesai.cli "bind anónimo"
 poetry run python -m agentesai.cli "enumerar usuarios y grupos"
 
-# O ejecutar directamente desde Python
-poetry run python -c "
-from agentesai.agent.sistema import SistemaAgentes
-sistema = SistemaAgentes()
-resultado = sistema.ejecutar_herramienta_ofensiva('tool_rootdse_info')
-print(resultado)
-"
+# Start TLS test
+poetry run python -m agentesai.cli "starttls test"
+poetry run python -m agentesai.cli "test seguridad tls"
+poetry run python -m agentesai.cli "downgrade tls"
 
-# Enumeración anónima
-poetry run python -c "
-from agentesai.agent.sistema import SistemaAgentes
-sistema = SistemaAgentes()
-resultado = sistema.ejecutar_herramienta_ofensiva('tool_anonymous_enum')
-print(resultado)
-"
+# Simple vs SASL Bind
+poetry run python -m agentesai.cli "simple vs sasl bind"
+poetry run python -m agentesai.cli "ldapwhoami"
+poetry run python -m agentesai.cli "comparar autenticacion"
+poetry run python -m agentesai.cli "fallback bind"
 
-# Test STARTTLS
-poetry run python -c "
-from agentesai.agent.sistema import SistemaAgentes
-sistema = SistemaAgentes()
-resultado = sistema.ejecutar_herramienta_ofensiva('tool_starttls_test')
-print(resultado)
-"
-```
+# ACL Diff
+poetry run python -m agentesai.cli "acl diff"
+poetry run python -m agentesai.cli "comparar acls"
+poetry run python -m agentesai.cli "anonimo vs admin"
+poetry run python -m agentesai.cli "control acceso"
+poetry run python -m agentesai.cli "escalacion privilegios"
+
+# Self Password Change
+poetry run python -m agentesai.cli "self password change"
+poetry run python -m agentesai.cli "cambiar contraseña"
+poetry run python -m agentesai.cli "by self write"
+poetry run python -m agentesai.cli "escalacion privilegios"
+poetry run python -m agentesai.cli "low priv"
+
+### **Fingerprint NSE con Target Específico:**
+```bash
+# Con IP específica
+poetry run python -m agentesai.cli "nmap nse 192.168.1.100"
+poetry run python -m agentesai.cli "fingerprint nmap 10.0.0.50"
+poetry run python -m agentesai.cli "ldap nmap nse 172.16.1.10"
+
+# Con hostname
+poetry run python -m agentesai.cli "nmap nse ldap.example.com"
+poetry run python -m agentesai.cli "fingerprint nmap dc01.local"
+poetry run python -m agentesai.cli "nse scripts server.domain.com"
+
+# Con puerto específico
+poetry run python -m agentesai.cli "nmap nse 192.168.1.100 puerto 636"
+poetry run python -m agentesai.cli "fingerprint nmap ldap.example.com 389"
+
+# Con scripts específicos
+poetry run python -m agentesai.cli "nmap nse 192.168.1.100 ldap-rootdse"
+poetry run python -m agentesai.cli "fingerprint nmap 10.0.0.50 ldap-search"
+poetry run python -m agentesai.cli "nse scripts server.com ldap-brute"
+
+# Con modo verbose
+poetry run python -m agentesai.cli "nmap nse 192.168.1.100 verbose"
+poetry run python -m agentesai.cli "fingerprint nmap ldap.example.com detallado"
+
+# Con timeout personalizado
+poetry run python -m agentesai.cli "nmap nse 192.168.1.100 timeout 60"
+poetry run python -m agentesai.cli "fingerprint nmap 10.0.0.50 timeout 120"
 ```
 
 ## 🔄 **Sistema de Reset**

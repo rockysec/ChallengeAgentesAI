@@ -245,9 +245,9 @@ poetry run python -m agentesai.cli "¿cuál es el departamento con más usuarios
 
 # Generar herramienta para ordenar usuarios
 poetry run python -m agentesai.cli "mostrar usuarios ordenados alfabeticamente"
-
-### **🔴 Herramientas Ofensivas (Análisis de Seguridad):**
 ```
+### **🔴 Herramientas Ofensivas (Análisis de Seguridad):**
+
 ```bash
 # Análisis RootDSE del servidor LDAP
 poetry run python -m agentesai.cli "rootdse info"

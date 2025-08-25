@@ -1,0 +1,22 @@
+# Dependencias principales del Sistema de Agentes AI
+# Generado desde pyproject.toml para usuarios que prefieren pip
+
+# Framework de IA
+langchain>=0.2.0
+google-generativeai>=0.8.0
+
+# Configuración y utilidades
+python-dotenv>=1.0.0
+pydantic>=2.0.0
+rich>=13.0.0
+click>=8.0.0
+
+# Conectividad LDAP
+python-ldap>=3.4.4
+ldap3>=2.9.0
+
+# Dependencias de desarrollo (opcionales)
+# pytest>=7.0.0
+# black>=23.0.0
+# flake8>=6.0.0
+# mypy>=1.0.0 

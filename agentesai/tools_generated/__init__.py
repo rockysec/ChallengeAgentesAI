@@ -1,0 +1,3 @@
+"""
+Herramientas generadas dinámicamente
+""" 

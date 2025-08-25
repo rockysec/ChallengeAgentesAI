@@ -75,7 +75,7 @@ Antes de comenzar, asegúrate de tener instalado:
 git clone https://github.com/rockysec/ChallengeAgentesAI.git
 
 # Entrar al directorio del proyecto
-cd offsec_challenge/AgentesAI
+cd ChallengeAgentesAI
 ```
 
 ### 🐍 **Paso 2: Instalar Python y Poetry**

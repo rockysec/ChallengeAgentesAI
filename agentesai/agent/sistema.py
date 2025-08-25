@@ -12,6 +12,7 @@ from .coordinador import AgenteCoordinador
 from .ejecutor import AgenteEjecutor
 from .generador import AgenteGenerador
 from .registry import RegistryTools
+from .ofensivo import AgenteOfensivo
 
 console = Console()
 logger = logging.getLogger(__name__)
@@ -24,6 +25,7 @@ class SistemaAgentes:
         self.ejecutor = AgenteEjecutor()
         self.generador = AgenteGenerador()
         self.registry = RegistryTools()
+        self.ofensivo = AgenteOfensivo()
         
         # Estado del sistema
         self.estado = "inicializado"
@@ -81,8 +83,14 @@ class SistemaAgentes:
             
             # Paso 2: Ejecutar la decisión tomada
             if decision["accion"] == "ejecutar":
-                # La consulta puede ser respondida con herramientas existentes
-                resultado = self._ejecutar_herramienta_existente(decision)
+                # Verificar si es una herramienta ofensiva
+                if decision["herramienta"] == "tool_rootdse_info":
+                    resultado = self.ejecutar_herramienta_ofensiva("tool_rootdse_info")
+                elif decision["herramienta"] == "tool_anonymous_enum":
+                    resultado = self.ejecutar_herramienta_ofensiva("tool_anonymous_enum")
+                else:
+                    # La consulta puede ser respondida con herramientas existentes
+                    resultado = self._ejecutar_herramienta_existente(decision)
             else:
                 # La consulta requiere generar una nueva herramienta
                 resultado = self._generar_y_ejecutar_herramienta(decision)
@@ -233,6 +241,10 @@ class SistemaAgentes:
         console.print(Panel("⚡ Agente Ejecutor", style="bold yellow"))
         self.ejecutor.mostrar_estado()
         
+        # Estado del agente ofensivo
+        console.print(Panel("🔴 Agente Ofensivo", style="bold red"))
+        self.ofensivo.mostrar_estado()
+        
         # Estado del registry
         console.print(Panel("📚 Registry de Tools", style="bold magenta"))
         self.registry.mostrar_estado()
@@ -246,8 +258,38 @@ class SistemaAgentes:
             "consultas_procesadas": self.consultas_procesadas,
             "coordinador": self.coordinador.obtener_estadisticas(),
             "ejecutor": self.ejecutor.listar_herramientas(),
+            "ofensivo": self.ofensivo.obtener_estadisticas(),
             "registry": self.registry.obtener_estadisticas()
         }
+    
+    def ejecutar_herramienta_ofensiva(self, nombre: str, **kwargs) -> Dict[str, Any]:
+        """
+        Ejecuta una herramienta ofensiva específica.
+        
+        Args:
+            nombre (str): Nombre de la herramienta ofensiva
+            **kwargs: Parámetros adicionales para la herramienta
+            
+        Returns:
+            Dict[str, Any]: Resultado de la ejecución de la herramienta ofensiva
+        """
+        try:
+            console.print(Panel(f"🔴 Ejecutando herramienta ofensiva: {nombre}", style="red"))
+            
+            resultado = self.ofensivo.ejecutar_herramienta_ofensiva(nombre, **kwargs)
+            
+            # Registrar la operación ofensiva
+            self.coordinador.registrar_consulta(f"herramienta_ofensiva:{nombre}", str(resultado))
+            
+            return resultado
+            
+        except Exception as e:
+            logger.error(f"Error ejecutando herramienta ofensiva {nombre}: {e}")
+            return {
+                "error": True,
+                "mensaje": f"Error ejecutando herramienta ofensiva {nombre}: {str(e)}",
+                "herramienta": nombre
+            }
     
     def modo_interactivo(self):
         """

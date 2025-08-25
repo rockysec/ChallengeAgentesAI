@@ -22,6 +22,7 @@ El sistema está compuesto por 5 agentes especializados que trabajan en conjunto
 | 🧠 **AgenteCoordinador** | Cerebro del sistema | `agentesai/agent/coordinador.py` | ✅ Implementado |
 | ⚡ **AgenteEjecutor** | Motor de ejecución | `agentesai/agent/ejecutor.py` | ✅ Implementado |
 | 🤖 **AgenteGenerador** | Creador de herramientas | `agentesai/agent/generador.py` | ✅ Implementado |
+| 🔴 **AgenteOfensivo** | Análisis de seguridad ofensiva | `agentesai/agent/ofensivo.py` | ✅ Implementado |
 | 📚 **RegistryTools** | Sistema de registro | `agentesai/agent/registry.py` | ✅ Implementado |
 
 ### **Flujo de Trabajo del Sistema**
@@ -56,6 +57,10 @@ Usuario → SistemaAgentes → AgenteCoordinador → [Decisión]
 - `list_all_users` - Lista todos los usuarios del LDAP
 - `search_users_by_department` - Búsqueda de usuarios por departamento
 - `analyze_ldap_structure` - Análisis de la estructura LDAP
+
+### **🔴 Herramientas Ofensivas (Análisis de Seguridad)**
+- `tool_rootdse_info` - Análisis RootDSE para namingContexts, extensiones y controles soportados
+- `tool_anonymous_enum` - Enumeración anónima para usuarios, grupos y atributos sensibles
 
 ## 🚀 **Instalación y Configuración Paso a Paso**
 
@@ -171,15 +176,6 @@ poetry run pytest tests/ -v
 
 ### 🎯 **Paso 6: Ejecutar la Aplicación**
 
-#### **Modo Interactivo (Recomendado):**
-```bash
-# Ejecutar en modo interactivo
-poetry run python -m agentesai.cli
-
-# O usar el script de demo
-poetry run python demo_completo.py
-```
-
 #### **Comandos Directos:**
 ```bash
 # Consulta básica
@@ -279,6 +275,36 @@ poetry run python -m agentesai.cli "¿cuál es el departamento con más usuarios
 
 # Generar herramienta para ordenar usuarios
 poetry run python -m agentesai.cli "mostrar usuarios ordenados alfabeticamente"
+
+### **🔴 Herramientas Ofensivas (Análisis de Seguridad):**
+
+```bash
+# Análisis RootDSE del servidor LDAP
+poetry run python -m agentesai.cli "rootdse info"
+poetry run python -m agentesai.cli "análisis rootdse"
+poetry run python -m agentesai.cli "información servidor ldap"
+
+# Enumeración anónima del directorio
+poetry run python -m agentesai.cli "enumeración anónima"
+poetry run python -m agentesai.cli "bind anónimo"
+poetry run python -m agentesai.cli "enumerar usuarios y grupos"
+
+# O ejecutar directamente desde Python
+poetry run python -c "
+from agentesai.agent.sistema import SistemaAgentes
+sistema = SistemaAgentes()
+resultado = sistema.ejecutar_herramienta_ofensiva('tool_rootdse_info')
+print(resultado)
+"
+
+# Enumeración anónima
+poetry run python -c "
+from agentesai.agent.sistema import SistemaAgentes
+sistema = SistemaAgentes()
+resultado = sistema.ejecutar_herramienta_ofensiva('tool_anonymous_enum')
+print(resultado)
+"
+```
 ```
 
 ## 🔄 **Sistema de Reset**

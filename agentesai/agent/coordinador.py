@@ -112,7 +112,18 @@ class AgenteCoordinador:
             # Herramientas adicionales de seguridad ofensiva
             "listar usuarios", "lista usuarios", "todos los usuarios", "list users", "all users",  # list_all_users
             "buscar usuarios", "usuarios por departamento", "search users", "users by department",  # search_users_by_department
-            "estructura ldap", "estructura del directorio", "ldap structure", "directory structure"  # analyze_ldap_structure
+            "estructura ldap", "estructura del directorio", "ldap structure", "directory structure",  # analyze_ldap_structure
+            
+            # Herramientas ofensivas
+            "rootdse", "root dse", "rootdse info", "root dse info",  # tool_rootdse_info
+            "análisis rootdse", "analisis rootdse", "rootdse analysis",  # tool_rootdse_info
+            "información servidor", "server info", "ldap info", "ldap server info",  # tool_rootdse_info
+            
+            # Enumeración anónima
+            "enumeración anónima", "enumeracion anonima", "anonymous enum",  # tool_anonymous_enum
+            "bind anónimo", "bind anonimo", "anonymous bind",  # tool_anonymous_enum
+            "usuarios anónimos", "usuarios anonimos", "anonymous users",  # tool_anonymous_enum
+            "enumerar usuarios", "enumerar grupos", "list users groups"  # tool_anonymous_enum
         ]
         
         # Verifica si alguno de los patrones está presente en la consulta
@@ -148,6 +159,12 @@ class AgenteCoordinador:
             return "search_users_by_department"
         elif any(palabra in consulta_lower for palabra in ["estructura ldap", "estructura del directorio", "ldap structure", "directory structure"]):
             return "analyze_ldap_structure"
+        
+        # Herramientas ofensivas
+        elif any(palabra in consulta_lower for palabra in ["rootdse", "root dse", "rootdse info", "root dse info", "análisis rootdse", "analisis rootdse", "rootdse analysis", "información servidor", "server info", "ldap info", "ldap server info"]):
+            return "tool_rootdse_info"
+        elif any(palabra in consulta_lower for palabra in ["enumeración anónima", "enumeracion anonima", "anonymous enum", "bind anónimo", "bind anonimo", "anonymous bind", "usuarios anónimos", "usuarios anonimos", "anonymous users", "enumerar usuarios", "enumerar grupos", "list users groups"]):
+            return "tool_anonymous_enum"
         
         return None
     
